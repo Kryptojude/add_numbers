@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <textarea cols="50" rows="50" id="tx_area">123=</textarea>
+
+    <button onclick="get_sum()">Sum</button>
+
+    <p>Sum:</p>
+    <input type="text" id="output">
+
+    <script>
+        function get_sum() {
+            // get input
+            let raw_input = document.getElementById("tx_area").value;
+            // append delimiter
+            raw_input = raw_input + '\n';
+            let sum = 0;
+            let current_number_string = "";
+            let number_array = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+
+            let i = 0;
+            while (i < raw_input.length) {
+                let i_next_increase = 1;
+                let current_char = raw_input[i];
+
+                // Check if current_char is number, minus or else
+                if (number_array.includes(current_char)){
+                    current_number_string += current_char;
+                }
+                else if (current_char == "-") {
+                    if (current_number_string == "")
+                        current_number_string = "-";
+                    else
+                        alert ("current_number_string not empty when parsing '-' \n current_number_string: " + current_number_string)
+                }
+                // anything else is delimiter for current_number_string
+                else {
+                        // add current number onto sum
+                        sum += Number(current_number_string);
+                        // reset current number
+                        current_number_string = "";
+                        // am I on line break?
+                        if (current_char == '\n') {
+                            // do nothing
+                            i_next_increase = 1;
+                        }
+                        // not on line break
+                        else {
+                            // jump to next line, bc there should only be one number per line
+                            // find position of next \n in raw_input
+                            let next_line_break_index = raw_input.indexOf("\n", i);
+                            // no more line breaks -> end
+                            if (next_line_break_index == -1)
+                                break;
+                            else {
+                                // advance loop to next line
+                                i_next_increase = next_line_break_index + 1 - i;
+                            }
+                        }
+                }
+
+                i += i_next_increase;
+            }
+
+            document.getElementById("output").value = sum;
+        }
+    </script>
+</html>
